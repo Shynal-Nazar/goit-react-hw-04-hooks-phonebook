@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import {
   PhoneSection,
   PhoneSectionName,
@@ -9,63 +9,68 @@ import {
 } from './Phonebook.styled';
 import PropTypes from 'prop-types';
 
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
+function PhonebookSectionp({ onAddContact }) {
+  const [nameInput, setNameInput] = useState('');
+  const [numberInput, setNumberInput] = useState('');
 
-class PhonebookSectionp extends Component {
-  state = INITIAL_STATE;
+  const handleChange = event => {
+    const { name, value } = event.target;
 
-  handleChange = (type, e) => {
-    this.setState({ [type]: e.target.value });
-  };
+    switch (name) {
+      case 'name':
+        setNameInput(value);
+        break;
 
-  handleSubmit = evt => {
-    evt.preventDefault();
-    const { name, number } = this.state;
-    const { onAddContact } = this.props;
-    if (name && number) {
-      onAddContact(name, number);
-      this.setState(INITIAL_STATE);
+      case 'number':
+        setNumberInput(value);
+        break;
+
+      default:
+        return;
     }
   };
 
-  render() {
-    const { name, number } = this.state;
-    return (
-      <PhoneSection>
-        <PhoneSectionName>Phonebook</PhoneSectionName>
-        <PhoneForm onSubmit={this.handleSubmit}>
-          <PhoneLabel>
-            Name
-            <PhoneInput
-              type="text"
-              name="name"
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-              value={name}
-              onChange={evt => this.handleChange('name', evt)}
-            />
-          </PhoneLabel>
-          <PhoneLabel>
-            Number
-            <PhoneInput
-              type="tel"
-              name="number"
-              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              required
-              value={number}
-              onChange={evt => this.handleChange('number', evt)}
-            />
-          </PhoneLabel>
-          <PhoneBtn type="submit">Add contacts</PhoneBtn>
-        </PhoneForm>
-      </PhoneSection>
-    );
-  }
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    if (nameInput && numberInput) {
+      onAddContact(nameInput, numberInput);
+      setNameInput('');
+      setNumberInput('');
+    }
+  };
+
+  return (
+    <PhoneSection>
+      <PhoneSectionName>Phonebook</PhoneSectionName>
+      <PhoneForm onSubmit={handleSubmit}>
+        <PhoneLabel>
+          Name
+          <PhoneInput
+            type="text"
+            name="name"
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            required
+            value={nameInput}
+            onChange={handleChange}
+          />
+        </PhoneLabel>
+        <PhoneLabel>
+          Number
+          <PhoneInput
+            type="tel"
+            name="number"
+            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            required
+            value={numberInput}
+            onChange={handleChange}
+          />
+        </PhoneLabel>
+        <PhoneBtn type="submit">Add contacts</PhoneBtn>
+      </PhoneForm>
+    </PhoneSection>
+  );
 }
 
 export default PhonebookSectionp;
