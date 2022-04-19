@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import useLocalStorage from 'components/useLocalStorage';
+import useLocalStorage from 'hooks/useLocalStorage';
 import { Container, Title } from './App.styled';
 import PhonebookSection from './phonebook/Phonebook';
 import ContactList from './contacts/ContactsList';
